@@ -14,6 +14,9 @@
         <h1 class="bg-slate-400 hover:bg-slate-500">タスク管理アプリ</h1>
         
         <div class="container mx-auto">
+            
+            @include('commons.error_tasks')
+            
             @yield('content')
         </div>
         

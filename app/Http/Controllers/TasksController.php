@@ -40,6 +40,11 @@ class TasksController extends Controller
      */
     public function store(Request $request)
     {
+        
+        $request->validate([
+            'status' => 'required|max:10',
+            'contnet'=> 'required|max:10',
+        ]);
         $task=new Task;
         $task->content=$request->content;
         $task->save();
@@ -82,6 +87,11 @@ class TasksController extends Controller
      */
     public function update(Request $request, $id)
     {
+        
+        $request->validate([
+            'status' => 'required|max:10',
+            'contnet'=> 'required|max:10',
+        ]);
         $task=Task::findorFail($id);
         
         $task -> content = $request -> content;
