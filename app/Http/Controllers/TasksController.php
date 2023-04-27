@@ -43,10 +43,11 @@ class TasksController extends Controller
         
         $request->validate([
             'status' => 'required|max:10',
-            'contnet'=> 'required|max:10',
+            'content'=> 'required|max:255',
         ]);
         $task=new Task;
         $task->content=$request->content;
+        $task -> status = $request->status;
         $task->save();
         
         return redirect('/');
@@ -90,11 +91,12 @@ class TasksController extends Controller
         
         $request->validate([
             'status' => 'required|max:10',
-            'contnet'=> 'required|max:10',
+            'content' => 'required|max:255',
         ]);
         $task=Task::findorFail($id);
         
         $task -> content = $request -> content;
+        $task -> status = $request -> status;
         $task->save();
         
         return redirect('/');
