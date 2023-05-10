@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Task;
+use Illuminate\Support\Facades\Auth;
 
 class TasksController extends Controller
 {
@@ -15,9 +16,24 @@ class TasksController extends Controller
     public function index()
     {
         //
-        $tasks=Task::all();
+        /*$tasks=Task::all();
         
-        return view('tasks.index',['tasks'=>$tasks,]);
+        return view('tasks.index',['tasks'=>$tasks,]);*/
+        $data = [];
+        if (\Auth::check()) { // 認証済みの場合
+            // 認証済みユーザを取得
+            $user = \Auth::user();
+            // ユーザの投稿の一覧を作成日時の降順で取得
+            // （後のChapterで他ユーザの投稿も取得するように変更しますが、現時点ではこのユーザの投稿のみ取得します）
+            $tasks = $user->tasks()->orderBy('created_at', 'desc')->paginate(5);
+            $data = [
+                'user' => $user,
+                'tasks' => $tasks,
+            ];
+        }
+        
+        // dashboardビューでそれらを表示
+        return view('dashboard', $data);
     }
 
     /**
@@ -45,12 +61,18 @@ class TasksController extends Controller
             'status' => 'required|max:10',
             'content'=> 'required|max:255',
         ]);
-        $task=new Task;
+        /*$task=new Task;
         $task->content=$request->content;
         $task -> status = $request->status;
         $task->save();
+        */
         
-        return redirect('/');
+        $request->user()->tasks()->create([
+            'content' => $request->content,
+            'status'=>$request->status,
+            'user_id'=>$request->id,
+        ]);
+        return redirect("/");
     }
 
     /**
@@ -61,9 +83,17 @@ class TasksController extends Controller
      */
     public function show($id)
     {
-        $task=Task::findOrFail($id);
+        
+        
+        $task=Task::findorFail($id);
+        
+        if(\Auth::id()===$task->user_id){
         
         return view('tasks.show',['task'=>$task]);
+        }
+        
+        return redirect('/');
+        
     }
 
     /**
@@ -76,7 +106,12 @@ class TasksController extends Controller
     {
         $task=Task::findorFail($id);
         
+        if(\Auth::id()===$task->user_id){
+        
+        
+        
         return view('tasks.edit',['task'=>$task]);
+        }
     }
 
     /**
@@ -89,6 +124,10 @@ class TasksController extends Controller
     public function update(Request $request, $id)
     {
         
+        $task=Task::findorFail($id);
+        
+        if(\Auth::id()===$task->user_id){
+        
         $request->validate([
             'status' => 'required|max:10',
             'content' => 'required|max:255',
@@ -98,6 +137,7 @@ class TasksController extends Controller
         $task -> content = $request -> content;
         $task -> status = $request -> status;
         $task->save();
+        }
         
         return redirect('/');
     }
@@ -112,8 +152,14 @@ class TasksController extends Controller
     {
         $task=Task::findorFail($id);
         
+        if(\Auth::id()===$task->user_id){
+        
         $task->delete();
         
-        return redirect('/');
+        return redirect('/')->with('削除に成功しました');
+        
+        }
+        
+        return redirect('/')->with('権限がありません');
     }
 }

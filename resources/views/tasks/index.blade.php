@@ -3,7 +3,6 @@
 @section('content')
 
 <div class="prose ml-4">
-        <h2>タスク一覧</h2>
     </div>
 
     @if (isset($tasks))
@@ -25,6 +24,8 @@
                 @endforeach
             </tbody>
         </table>
+        
+        {{ $tasks->links() }}
     @endif
     
     <a class="btn btn-primary　bg-slate-400" href="{{ route('tasks.create') }}">タスクの追加</a>

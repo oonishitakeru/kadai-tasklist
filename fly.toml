@@ -1,9 +1,9 @@
-# fly.toml app configuration file generated for wandering-paper-1858 on 2023-04-27T08:29:33Z
+# fly.toml app configuration file generated for winter-snowflake-3364 on 2023-05-09T03:22:45Z
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = "wandering-paper-1858"
+app = "winter-snowflake-3364"
 primary_region = "nrt"
 
 [build]
@@ -17,14 +17,14 @@ primary_region = "nrt"
   LOG_LEVEL = "info"
   LOG_STDERR_FORMATTER = "Monolog\\Formatter\\JsonFormatter"
   
-  APP_URL = "https://wandering-paper-1858.fly.dev"
+  APP_URL = "https://winter-snowflake-3364.fly.dev"
   APP_NAME = "Laravel"
-  APP_DEBUG = false
-  DB_CONNECTION="pgsql"
-  DB_HOST="db.kjyaealxccgvjhdgvjiq.supabase.co"
-  DB_PORT="5432"
-  DB_DATABASE="postgres"
-  DB_USERNAME="postgres"
+  APP_DEBUG = true
+  DB_CONNECTION = "pgsql"
+  DB_HOST = "db.qatirfkbsuughouwojia.supabase.co"
+  DB_PORT = "5432"
+  DB_DATABASE = "postgres"
+  DB_USERNAME = "postgres"
 
 [http_service]
   internal_port = 8080
